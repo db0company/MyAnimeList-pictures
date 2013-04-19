@@ -31,7 +31,7 @@ function        get_cache($user, $size) {
   $filename = 'cache/'.$user.'_'.$size;
   if (file_exists($filename)
       && (time() - filemtime($filename)) < $timeout) {
-    echo @file_get_contents($filename);
+    $cache = @file_get_contents($filename);
     return $cache;
   }
   return false;
