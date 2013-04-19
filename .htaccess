@@ -1,0 +1,8 @@
+Options +FollowSymlinks
+RewriteEngine on
+
+RewriteCond %{SCRIPT_FILENAME} !-d
+RewriteCond %{SCRIPT_FILENAME} !-f
+RewriteRule   ^([a-zA-Z0-9_-]+)/?(.*)$   /index.php?user=$1 [QSA]
+
+
