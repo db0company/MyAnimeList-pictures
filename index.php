@@ -26,11 +26,11 @@ function        check_size() {
   exit;
 }
 
-function        get_cache($user, $size) {
+function        get_cache($user, $size, $check_time = true) {
   $timeout = 24 * 60 * 60;
   $filename = 'cache/'.$user.'_'.$size;
   if (file_exists($filename)
-      && (time() - filemtime($filename)) < $timeout) {
+      && (!$check_time || (time() - filemtime($filename)) < $timeout)) {
     $cache = @file_get_contents($filename);
     return $cache;
   }
@@ -40,8 +40,11 @@ function        get_cache($user, $size) {
 function        get_from_api($user, $size) {
   $content = @file_get_contents('http://mal-api.com/animelist/'.$user);
   if ($content === false) {
-    echo '// Error with the API. Maybe the user does not exist.';
-    exit;
+    if (!($cache = get_cache($user, $size, false))) {
+      echo '// Error with the API. Maybe the user does not exist.';
+      exit;
+    }
+    return $cache; // an old version is still better than nothing :)
   }
   $list = json_decode($content);
   foreach ($list->anime as $anime) {
