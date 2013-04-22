@@ -6,7 +6,7 @@ A solution to display pictures on [MyAnimeList](myanimelist.net).
 
 * Go to `Profile` then `Edit` then `My List Style` then `Advanced Style CSS Editor`
 (or use [this link](http://myanimelist.net/editprofile.php?go=stylepref&do=cssadv)).
-* At the beginning of your CSS file, add this line and replace `USERNAME` by your username.
+* At the verry beginning of your CSS file, add this line and __replace `USERNAME` by your username__.
 
 ```css
 @import url("http://malcss.db0.fr/USERNAME");
