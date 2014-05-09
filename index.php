@@ -38,18 +38,20 @@ function        get_cache($user, $size, $check_time = true) {
 }
 
 function        get_from_api($user, $size) {
-  $content = @file_get_contents('http://mal-api.com/animelist/'.$user);
-  if ($content === false) {
+  $url = 'http://myanimelist.net/malappinfo.php?status=all&u='.$user;
+  $content = @file_get_contents($url);
+  if ($content === false
+      || !($list = simplexml_load_string($content))
+      || !($list = $list->anime)) {
     if (!($cache = get_cache($user, $size, false))) {
       echo '// Error with the API. Maybe the user does not exist.';
       exit;
     }
     return $cache; // an old version is still better than nothing :)
   }
-  $list = json_decode($content);
-  foreach ($list->anime as $anime) {
-    $result .= 'a[href^="http://myanimelist.net/anime/'.$anime->id.'/"]:before {
-  content: url('.($size == 'small' ? str_replace('.jpg', 't.jpg', $anime->image_url) : $anime->image_url).') " ";
+  foreach ($list as $anime) {
+    $result .= 'a[href^="/anime/'.$anime->series_animedb_id.'/"]:before {
+  content: url('.($size == 'small' ? str_replace('.jpg', 't.jpg', $anime->series_image) : $anime->series_image).') " ";
 }
 ';
   }
